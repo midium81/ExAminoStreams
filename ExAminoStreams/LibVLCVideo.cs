@@ -171,36 +171,23 @@ namespace SingleExePOC
 
         private void _mp_LengthChanged(object sender, MediaPlayerLengthChangedEventArgs e)
         {
-            // TODO: this clash with the stream play procedure
             // run once
             if (!_loadHandlerFired)
             {
-                if (!_isStreamingVideo)
+                _loadHandlerFired = true;
+
+                if (e.Length <= 0 || (!_mp.Media.Tracks.Any(t => t.TrackType == TrackType.Video) && !_isStreamingVideo))
                 {
-                    _loadHandlerFired = true;
+                    // Workaround for loading audio files - they would still be played
+                    _mp.Mute = true;
+                    _playbackContainer.BeginInvoke((Action)(() => _mp.Stop()));
 
-                    if (e.Length <= 0 || !_mp.Media.Tracks.Any(t => t.TrackType == TrackType.Video))
-                    {
-                        // Workaround for loading audio files - they would still be played
-                        _mp.Mute = true;
-                        _playbackContainer.BeginInvoke((Action)(() => _mp.Stop()));
-
-                        _playbackContainer.BeginInvoke((Action)(() => VideoLoadError?.Invoke(this, "Invalid video file format")));
-                    }
-                    else
-                    {
-                        _playbackTimer.Start();
-                        _playbackContainer.BeginInvoke((Action)(() => VideoLoaded?.Invoke(this, new EventArgs())));
-                    }
+                    _playbackContainer.BeginInvoke((Action)(() => VideoLoadError?.Invoke(this, "Invalid video file format")));
                 }
-                else 
+                else
                 {
-                    // Streaming video
-                    if (_mp.Length > 0)
-                    {
-                        _playbackTimer.Start();
-                        _playbackContainer.BeginInvoke((Action)(() => VideoLoaded?.Invoke(this, new EventArgs())));
-                    }
+                    _playbackTimer.Start();
+                    _playbackContainer.BeginInvoke((Action)(() => VideoLoaded?.Invoke(this, new EventArgs())));
                 }
             }
         }
