@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System.ComponentModel;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ExAminoStreams.Controls
 {
@@ -63,7 +55,7 @@ namespace ExAminoStreams.Controls
         /// <value>The size of the thumb.</value>
         /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value is lower than zero or grather than half of appropiate dimension</exception>
         [Description("Set Slider thumb size")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         [DefaultValue(16)]
         public Size ThumbSize
         {
@@ -90,7 +82,7 @@ namespace ExAminoStreams.Controls
         /// </summary>
         /// <value>The size of the thumb round rectangle edges.</value>
         [Description("Set Slider's thumb round rect size")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         [DefaultValue(typeof(Size), "16; 16")]
         public Size ThumbRoundRectSize
         {
@@ -105,27 +97,6 @@ namespace ExAminoStreams.Controls
             }
         }
 
-        private Size _borderRoundRectSize = new Size(8, 8);
-        /// <summary>
-        /// Gets or sets the size of the border round rect.
-        /// </summary>
-        /// <value>The size of the border round rect.</value>
-        [Description("Set Slider's border round rect size")]
-        [Category("VideoSlider")]
-        [DefaultValue(typeof(Size), "8; 8")]
-        public Size BorderRoundRectSize
-        {
-            get { return _borderRoundRectSize; }
-            set
-            {
-                int h = value.Height, w = value.Width;
-                if (h <= 0) h = 1;
-                if (w <= 0) w = 1;
-                _borderRoundRectSize = new Size(w, h);
-                Invalidate();
-            }
-        }
-
         #endregion
 
         #region Appearance
@@ -136,7 +107,7 @@ namespace ExAminoStreams.Controls
         /// </summary>
         /// <value>The padding.</value>
         [Description("Set Slider padding (inside margins: left & right or bottom & top)")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         [DefaultValue(0)]
         public new int Padding
         {
@@ -164,7 +135,7 @@ namespace ExAminoStreams.Controls
         /// <value>The value.</value>
         /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when value is outside appropriate range (min, max)</exception>
         [Description("Set Slider value")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         [DefaultValue(30)]
         public long Value
         {
@@ -188,7 +159,7 @@ namespace ExAminoStreams.Controls
         /// <value>The minimum value.</value>
         /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when minimal value is greater than maximal one</exception>
         [Description("Set Slider minimal point")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         [DefaultValue(0)]
         public long Minimum
         {
@@ -216,7 +187,7 @@ namespace ExAminoStreams.Controls
         /// <value>The maximum value.</value>
         /// <exception cref="T:System.ArgumentOutOfRangeException">exception thrown when maximal value is lower than minimal one</exception>
         [Description("Set Slider maximal point")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         [DefaultValue(100)]
         public long Maximum
         {
@@ -243,7 +214,7 @@ namespace ExAminoStreams.Controls
         /// </summary>
         /// <value>The small change value.</value>
         [Description("Set trackbar's small change")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         [DefaultValue(1)]
         public long SmallChange
         {
@@ -257,7 +228,7 @@ namespace ExAminoStreams.Controls
         /// </summary>
         /// <value>The large change value.</value>
         [Description("Set trackbar's large change")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         [DefaultValue(5)]
         public long LargeChange
         {
@@ -275,7 +246,7 @@ namespace ExAminoStreams.Controls
         /// </summary>
         /// <value>The thumb outer color.</value>
         [Description("Sets Slider thumb outer color")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         [DefaultValue(typeof(Color), "White")]
         public Color ThumbOuterColor
         {
@@ -293,7 +264,7 @@ namespace ExAminoStreams.Controls
         /// </summary>
         /// <value>The inner color of the thumb.</value>
         [Description("Set Slider thumb inner color")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         public Color ThumbInnerColor
         {
             get { return _thumbInnerColor; }
@@ -310,7 +281,7 @@ namespace ExAminoStreams.Controls
         /// </summary>
         /// <value>The color of the thumb pen.</value>
         [Description("Set Slider thumb pen color")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         public Color ThumbPenColor
         {
             get { return _thumbPenColor; }
@@ -327,7 +298,7 @@ namespace ExAminoStreams.Controls
         /// </summary>
         /// <value>The inner color of the bar.</value>
         [Description("Set Slider bar inner color")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         [DefaultValue(typeof(Color), "Black")]
         public Color BarInnerColor
         {
@@ -339,77 +310,13 @@ namespace ExAminoStreams.Controls
             }
         }
 
-        private Color _elapsedPenColorTop = Color.FromArgb(95, 140, 180);   // bleu clair
-        /// <summary>
-        /// Gets or sets the top color of the Elapsed
-        /// </summary>
-        [Description("Gets or sets the top color of the elapsed")]
-        [Category("VideoSlider")]
-        public Color ElapsedPenColorTop
-        {
-            get { return _elapsedPenColorTop; }
-            set
-            {
-                _elapsedPenColorTop = value;
-                Invalidate();
-            }
-        }
-
-        private Color _elapsedPenColorBottom = Color.FromArgb(99, 130, 208);   // bleu très clair
-        /// <summary>
-        /// Gets or sets the bottom color of the elapsed
-        /// </summary>
-        [Description("Gets or sets the bottom color of the elapsed")]
-        [Category("VideoSlider")]
-        public Color ElapsedPenColorBottom
-        {
-            get { return _elapsedPenColorBottom; }
-            set
-            {
-                _elapsedPenColorBottom = value;
-                Invalidate();
-            }
-        }
-
-        private Color _barPenColorTop = Color.FromArgb(55, 60, 74);     // gris foncé
-        /// <summary>
-        /// Gets or sets the top color of the bar
-        /// </summary>
-        [Description("Gets or sets the top color of the bar")]
-        [Category("VideoSlider")]
-        public Color BarPenColorTop
-        {
-            get { return _barPenColorTop; }
-            set
-            {
-                _barPenColorTop = value;
-                Invalidate();
-            }
-        }
-
-        private Color _barPenColorBottom = Color.FromArgb(87, 94, 110);    // gris moyen
-        /// <summary>
-        /// Gets or sets the bottom color of bar
-        /// </summary>
-        [Description("Gets or sets the bottom color of the bar")]
-        [Category("VideoSlider")]
-        public Color BarPenColorBottom
-        {
-            get { return _barPenColorBottom; }
-            set
-            {
-                _barPenColorBottom = value;
-                Invalidate();
-            }
-        }
-
         private Color _elapsedInnerColor = Color.FromArgb(21, 56, 152);
         /// <summary>
         /// Gets or sets the inner color of the elapsed.
         /// </summary>
         /// <value>The inner color of the elapsed.</value>
         [Description("Set Slider's elapsed part inner color")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         public Color ElapsedInnerColor
         {
             get { return _elapsedInnerColor; }
@@ -425,7 +332,7 @@ namespace ExAminoStreams.Controls
         /// Gets or sets the color of the graduations
         /// </summary>
         [Description("Color of graduations")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         public Color TickColor
         {
             get { return _tickColor; }
@@ -451,7 +358,7 @@ namespace ExAminoStreams.Controls
         private float _tickDivide = 0;
 
         [Description("Gets or sets a value used to divide the graduation")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         public float TickDivide
         {
             get { return _tickDivide; }
@@ -464,7 +371,7 @@ namespace ExAminoStreams.Controls
 
         private float _tickAdd = 0;
         [Description("Gets or sets a value added to the graduation")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         public float TickAdd
         {
             get { return _tickAdd; }
@@ -480,7 +387,7 @@ namespace ExAminoStreams.Controls
         /// Gets or sets where to display the ticks (None, both top-left, bottom-right)
         /// </summary>
         [Description("Gets or sets where to display the ticks")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         [DefaultValue(TickStyle.TopLeft)]
         public TickStyle TickStyle
         {
@@ -497,7 +404,7 @@ namespace ExAminoStreams.Controls
         /// How many divisions of maximum?
         /// </summary>
         [Description("Set the number of intervals between minimum and maximum")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         public decimal ScaleDivisions
         {
             get { return _scaleDivisions; }
@@ -507,7 +414,6 @@ namespace ExAminoStreams.Controls
                 {
                     _scaleDivisions = value;
                 }
-                //else throw new ArgumentOutOfRangeException("TickFreqency must be > 0 and < Maximum");
 
                 Invalidate();
             }
@@ -518,7 +424,7 @@ namespace ExAminoStreams.Controls
         /// How many subdivisions for each division
         /// </summary>
         [Description("Set the number of subdivisions between main divisions of graduation.")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         public decimal ScaleSubDivisions
         {
             get { return _scaleSubDivisions; }
@@ -529,7 +435,6 @@ namespace ExAminoStreams.Controls
                     _scaleSubDivisions = value;
 
                 }
-                //else throw new ArgumentOutOfRangeException("TickSubFreqency must be > 0 and < TickFrequency");
 
                 Invalidate();
             }
@@ -540,7 +445,7 @@ namespace ExAminoStreams.Controls
         /// Shows Small Scale marking.
         /// </summary>
         [Description("Show or hide subdivisions of graduations")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         public bool ShowSmallScale
         {
             get { return _showSmallScale; }
@@ -573,7 +478,7 @@ namespace ExAminoStreams.Controls
         /// Shows Small Scale marking.
         /// </summary>
         [Description("Show or hide subdivisions of graduations")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         public bool ShowBigScale
         {
             get { return _showBigScale; }
@@ -606,7 +511,7 @@ namespace ExAminoStreams.Controls
         /// Shows Small Scale marking.
         /// </summary>
         [Description("Show or hide text value of graduations")]
-        [Category("VideoSlider")]
+        [Category(nameof(VideoSlider))]
         public bool ShowDivisionsText
         {
             get { return _showDivisionsText; }
@@ -626,7 +531,7 @@ namespace ExAminoStreams.Controls
         /// </summary>
         [Bindable(true),
         Browsable(true),
-        Category("VideoSlider"),
+        Category(nameof(VideoSlider)),
         Description("Get or Sets the Font of the Text being displayed."),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible),
         EditorBrowsable(EditorBrowsableState.Always)]
@@ -649,7 +554,7 @@ namespace ExAminoStreams.Controls
         /// </summary>
         [Bindable(true),
         Browsable(true),
-        Category("VideoSlider"),
+        Category(nameof(VideoSlider)),
         Description("Get or Sets the Color of the Text being displayed."),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible),
         EditorBrowsable(EditorBrowsableState.Always)]
@@ -715,23 +620,17 @@ namespace ExAminoStreams.Controls
             {
                 Color[] desaturatedColors = DesaturateColors(_thumbOuterColor, _thumbInnerColor, _thumbPenColor,
                                                              _barInnerColor,
-                                                             _elapsedPenColorTop, _elapsedPenColorBottom,
-                                                             _barPenColorTop, _barPenColorBottom,
                                                              _elapsedInnerColor);
                 DrawColorSlider(e,
                                     desaturatedColors[0], desaturatedColors[1], desaturatedColors[2],
                                     desaturatedColors[3],
-                                    desaturatedColors[4], desaturatedColors[5],
-                                    desaturatedColors[6], desaturatedColors[7],
-                                    desaturatedColors[8]);
+                                    desaturatedColors[4]);
             }
             else
             {
                 DrawColorSlider(e,
                                 _thumbOuterColor, _thumbInnerColor, _thumbPenColor,
                                 _barInnerColor,
-                                _elapsedPenColorTop, _elapsedPenColorBottom,
-                                _barPenColorTop, _barPenColorBottom,
                                 _elapsedInnerColor);
             }
         }
@@ -747,11 +646,11 @@ namespace ExAminoStreams.Controls
         /// <param name="barPenColorPaint">The bar pen color paint.</param>
         /// <param name="elapsedInnerColorPaint">The elapsed inner color paint.</param>
         private void DrawColorSlider(PaintEventArgs e,
-            Color thumbOuterColorPaint, Color thumbInnerColorPaint, Color thumbPenColorPaint,
-            Color barInnerColorPaint,
-            Color ElapsedTopPenColorPaint, Color ElapsedBottomPenColorPaint,
-            Color barTopPenColorPaint, Color barBottomPenColorPaint,
-            Color elapsedInnerColorPaint)
+                                     Color thumbOuterColorPaint,
+                                     Color thumbInnerColorPaint,
+                                     Color thumbPenColorPaint,
+                                     Color barInnerColorPaint,
+                                     Color elapsedInnerColorPaint)
         {
             try
             {
@@ -792,64 +691,6 @@ namespace ExAminoStreams.Controls
                 e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 3f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + barRect.Height / 2);
 
                 #endregion draw elapsed bar
-
-
-                //#region draw external contours
-
-                ////draw external bar band 
-                //// 2 lines: top and bottom
-                //if (_barOrientation == Orientation.Horizontal)
-                //{
-                //    #region horizontal
-                //    // Elapsed top
-                //    e.Graphics.DrawLine(new Pen(ElapsedTopPenColorPaint, 1f), barRect.X, barRect.Y - 1 + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y - 1 + barRect.Height / 2);
-                //    // Elapsed bottom
-                //    e.Graphics.DrawLine(new Pen(ElapsedBottomPenColorPaint, 1f), barRect.X, barRect.Y + 1 + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + 1 + barRect.Height / 2);
-
-
-                //    // Remain top
-                //    e.Graphics.DrawLine(new Pen(barTopPenColorPaint, 1f), barRect.X + elapsedRect.Width, barRect.Y - 1 + barRect.Height / 2, barRect.X + barRect.Width, barRect.Y - 1 + barRect.Height / 2);
-                //    // Remain bottom
-                //    e.Graphics.DrawLine(new Pen(barBottomPenColorPaint, 1f), barRect.X + elapsedRect.Width, barRect.Y + 1 + barRect.Height / 2, barRect.X + barRect.Width, barRect.Y + 1 + barRect.Height / 2);
-
-
-                //    // Left vertical (dark)
-                //    e.Graphics.DrawLine(new Pen(barTopPenColorPaint, 1f), barRect.X, barRect.Y - 1 + barRect.Height / 2, barRect.X, barRect.Y + barRect.Height / 2 + 1);
-
-                //    // Right vertical (light)                        
-                //    e.Graphics.DrawLine(new Pen(barBottomPenColorPaint, 1f), barRect.X + barRect.Width, barRect.Y - 1 + barRect.Height / 2, barRect.X + barRect.Width, barRect.Y + 1 + barRect.Height / 2);
-                //    #endregion
-                //}
-                //else
-                //{
-                //    #region vertical
-                //    // Elapsed top
-                //    e.Graphics.DrawLine(new Pen(ElapsedTopPenColorPaint, 1f), barRect.X - 1 + barRect.Width / 2, barRect.Y + (barRect.Height - elapsedRect.Height), barRect.X - 1 + barRect.Width / 2, barRect.Y + barRect.Height);
-
-                //    // Elapsed bottom
-                //    e.Graphics.DrawLine(new Pen(ElapsedBottomPenColorPaint, 1f), barRect.X + 1 + barRect.Width / 2, barRect.Y + (barRect.Height - elapsedRect.Height), barRect.X + 1 + barRect.Width / 2, barRect.Y + barRect.Height);
-
-
-                //    // Remain top
-                //    e.Graphics.DrawLine(new Pen(barTopPenColorPaint, 1f), barRect.X - 1 + barRect.Width / 2, barRect.Y, barRect.X - 1 + barRect.Width / 2, barRect.Y + barRect.Height - elapsedRect.Height);
-
-
-                //    // Remain bottom
-                //    e.Graphics.DrawLine(new Pen(barBottomPenColorPaint, 1f), barRect.X + 1 + barRect.Width / 2, barRect.Y, barRect.X + 1 + barRect.Width / 2, barRect.Y + barRect.Height - elapsedRect.Height);
-
-
-                //    // top horizontal (dark) 
-                //    e.Graphics.DrawLine(new Pen(barTopPenColorPaint, 1f), barRect.X - 1 + barRect.Width / 2, barRect.Y, barRect.X + 1 + barRect.Width / 2, barRect.Y);
-
-                //    // bottom horizontal (light)
-                //    e.Graphics.DrawLine(new Pen(barBottomPenColorPaint, 1f), barRect.X - 1 + barRect.Width / 2, barRect.Y + barRect.Height, barRect.X + 1 + barRect.Width / 2, barRect.Y + barRect.Height);
-                //    #endregion
-
-                //}
-
-                //#endregion draw contours
-
-
 
                 #region draw thumb
 

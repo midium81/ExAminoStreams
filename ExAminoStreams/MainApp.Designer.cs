@@ -253,12 +253,7 @@
             // 
             videoSlider.BackColor = SystemColors.Control;
             videoSlider.BarInnerColor = Color.LightGray;
-            videoSlider.BarPenColorBottom = Color.FromArgb(87, 94, 110);
-            videoSlider.BarPenColorTop = Color.FromArgb(55, 60, 74);
-            videoSlider.BorderRoundRectSize = new Size(4, 4);
             videoSlider.ElapsedInnerColor = Color.FromArgb(21, 56, 152);
-            videoSlider.ElapsedPenColorBottom = Color.FromArgb(99, 130, 208);
-            videoSlider.ElapsedPenColorTop = Color.FromArgb(95, 140, 180);
             videoSlider.Enabled = false;
             videoSlider.Font = new Font("Microsoft Sans Serif", 6F);
             videoSlider.ForeColor = Color.White;
