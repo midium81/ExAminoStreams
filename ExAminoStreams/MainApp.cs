@@ -1,14 +1,14 @@
-using DevExpress.Xpo.Logger;
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Base;
 using DevExpress.XtraGrid.Views.Grid;
 using ExAminoStreams.API;
+using FlyleafLib;
+using FlyleafLib.MediaPlayer;
 using SingleExePOC;
 using StatsPerform.CollectionClients.Utilities.IO.Devices.ShuttleXPress;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Controls;
-using static DevExpress.XtraEditors.RoundedSkinPanel;
 using MessageBox = System.Windows.MessageBox;
 
 namespace ExAminoStreams
@@ -81,9 +81,11 @@ namespace ExAminoStreams
                 return;
 
             if (e.Direction == ShuttleEventArgs.DirectionTurned.Left)
-                RewindVideoSmall(e.AmountTurned);
+                //RewindVideoSmall(e.AmountTurned);
+                Player.ShowFramePrev();
             else
-                ForwardVideoSmall(e.AmountTurned);
+                //ForwardVideoSmall(e.AmountTurned);
+                Player.ShowFrameNext();
         }
 
         private void OnButtonPressed(object sender, EventArgs e)
@@ -111,8 +113,9 @@ namespace ExAminoStreams
             try
             {
                 // Stop playback of video file
-                if (_video is not null)
-                    _video.StopPlayback();
+                //if (_video is not null)
+                //    _video.StopPlayback();
+                Player.Pause();
                 IsPlaying = false;
 
                 UpdateButtonsStatus();
@@ -129,14 +132,15 @@ namespace ExAminoStreams
             try
             {
                 // Start playback of video file
-                if (_video is not null)
-                {
-                    _video.StartPlayback();
-                    IsPlaying = true;
+                //if (_video is not null)
+                //{
+                //    _video.StartPlayback();
+                Player.Play();
+                IsPlaying = true;
 
-                    UpdateButtonsStatus();
+                UpdateButtonsStatus();
 
-                }
+                //}
 
             }
             catch (Exception ex)
@@ -165,7 +169,8 @@ namespace ExAminoStreams
                 IsPlaying = false;
 
                 // Rewind video file
-                _video?.BackwardSeek(amount);
+                //_video?.BackwardSeek(amount);
+                Player.SeekBackward_(amount);
 
                 UpdateButtonsStatus();
 
@@ -184,7 +189,8 @@ namespace ExAminoStreams
                 IsPlaying = false;
 
                 // Seek forward in video file
-                _video?.ForwardSeek(amount);
+                //_video?.ForwardSeek(amount);
+                Player.SeekForward_(amount);
 
                 UpdateButtonsStatus();
 
@@ -212,6 +218,8 @@ namespace ExAminoStreams
         #endregion
 
         private Form _owner;
+        public Player Player { get; set; }
+        public Config Config { get; set; }
 
         public bool InvokeIfRequired(Delegate action, params object[] args)
         {
@@ -235,6 +243,75 @@ namespace ExAminoStreams
 
             _usbShuttle.ScanForDevice();
             AttachJogShuttle(_usbShuttle);
+
+            // Initializes Engine (Specifies FFmpeg libraries path which is required)
+            Engine.Start(new EngineConfig()
+            {
+#if DEBUG
+                LogOutput = ":debug",
+                LogLevel = LogLevel.Debug,
+                FFmpegLogLevel = Flyleaf.FFmpeg.LogLevel.Warn,
+#endif
+
+                UIRefresh = true, // For Activity Mode usage
+                PluginsPath = ":Plugins",
+                FFmpegPath = ":FFmpeg",
+            });
+
+            // Prepares Player's Configuration
+            Config = new Config();
+            Player = new Player(Config);
+
+            Player.OpenCompleted += OnOpenCompleted;
+            Player.PropertyChanged += OnPropertyChanged;
+            flyleafHost1.Player = Player;
+
+
+        }
+
+        private delegate void OnPropertyChangedDelegate(object? sender, PropertyChangedEventArgs e);
+        private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new OnPropertyChangedDelegate(OnPropertyChanged), sender, e);
+                return;
+            }
+
+            switch (e.PropertyName)
+            {
+                case "CurTime":
+                    var timeSpan = new TimeSpan(flyleafHost1.Player.CurTime);
+                    lblTime.Text = timeSpan.ToString(@"hh\:mm\:ss");
+                    trkVideoTime.Value = flyleafHost1.Player.CurTime;
+                    break;
+
+            }
+        }
+
+        private delegate void OnOpenCompletedDelegate(object? sender, OpenCompletedArgs e);
+        private void OnOpenCompleted(object? sender, OpenCompletedArgs e)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new OnOpenCompletedDelegate(OnOpenCompleted), sender, e);
+                return;
+            }
+
+            trkVideoTime.Precision = (Player.Duration / int.MaxValue) + 1;
+            trkVideoTime.Maximum = Player.Duration;
+            trkVideoTime.SmallChange = Player.Config.Player.SeekOffset; // 100 milliseconds...
+            trkVideoTime.LargeChange = Player.Config.Player.SeekOffset2; // 1 minute
+            trkVideoTime.Enabled = true;
+
+            videoSlider.Maximum = Player.Duration;
+            videoSlider.SmallChange = Player.Config.Player.SeekOffset; // 100 milliseconds...
+            videoSlider.LargeChange = Player.Config.Player.SeekOffset2; // 1 minute
+            videoSlider.Enabled = true;
+
+            IsPlaying = true;
+
+            UpdateButtonsStatus();
 
         }
 
@@ -543,11 +620,14 @@ namespace ExAminoStreams
 
             Cursor = Cursors.WaitCursor;
 
-            _video = new LibVLCVideo(pnlVideoPlayer);
-            _video.OpenStream(streamUri, false);
-            _video.StartPlayback();
-            _video.VideoLoaded += OnVideoLoaded;
-            _video.TimeElapsed += OnTimeElapsed;
+            //_video = new LibVLCVideo(pnlVideoPlayer);
+            //_video.OpenStream(streamUri, false);
+            //_video.StartPlayback();
+            //_video.VideoLoaded += OnVideoLoaded;
+            //_video.TimeElapsed += OnTimeElapsed;
+
+            Player.OpenAsync(streamUri);
+            Player.renderer.SetChildHandle(pnlVideoPlayer.Handle);
 
             Cursor = null;
 
@@ -582,22 +662,26 @@ namespace ExAminoStreams
 
         private void btNextFrame_Click(object sender, EventArgs e)
         {
-            ForwardVideoSmall(1);
+            //ForwardVideoSmall(1);
+            Player.ShowFrameNext();
         }
 
         private void btPrevFrame_Click(object sender, EventArgs e)
         {
-            RewindVideoSmall(1);
+            //RewindVideoSmall(1);
+            Player.ShowFramePrev();
         }
 
         private void btForward_Click(object sender, EventArgs e)
         {
-            ForwardVideo(10);
+            //ForwardVideo(10);
+            Player.SeekForward2();
         }
 
         private void btBackward_Click(object sender, EventArgs e)
         {
-            RewindVideo(10);
+            //RewindVideo(10);
+            Player.SeekBackward2();
         }
 
         private void btPlayPause_Click(object sender, EventArgs e)
@@ -617,6 +701,7 @@ namespace ExAminoStreams
 
                 MillisecondsScroll(milliseconds);
                 trkVideoTime.Value = milliseconds;
+                videoSlider.Value = milliseconds;
             }
 
         }
@@ -633,7 +718,8 @@ namespace ExAminoStreams
                 Console.WriteLine($"{DateTime.UtcNow:o} MILLISECONDS SCROLL {trkVideoTime.Value}");
 
                 // Seek to specified value of progress bar in video file
-                _video.SeekMs(milliseconds);
+                //_video.SeekMs(milliseconds);
+                Player.Seek(milliseconds);
 
             }
             catch (Exception ex)
@@ -642,20 +728,38 @@ namespace ExAminoStreams
             }
         }
 
+        private float _videoTime;
         private void OnValueChanged(object sender, EventArgs e)
         {
-            MillisecondsScroll(trkVideoTime.Value);
+            _videoTime = trkVideoTime.Value;
         }
 
         private bool _isMute = false;
 
         private void btMute_Click(object sender, EventArgs e)
         {
-            _isMute = !_isMute;
-            if(_isMute)
-                _video.Volume = 0;
-            else
-                _video.Volume = 50;
+            //_isMute = !_isMute;
+            //if(_isMute)
+            //    _video.Volume = 0;
+            //else
+            //    _video.Volume = 50;
+
+            Player.Audio.ToggleMute();
+        }
+
+        private void OnTrkMouseUp(object sender, MouseEventArgs e)
+        {
+            Player.CurTime = (long)_videoTime;
+        }
+
+        private void OnNewScroll(object sender, ScrollEventArgs e)
+        {
+            _videoTime = videoSlider.Value;
+        }
+
+        private void OnNewMouseUp(object sender, MouseEventArgs e)
+        {
+            Player.CurTime = (long)_videoTime;
         }
     }
 }

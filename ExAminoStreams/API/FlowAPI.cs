@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using DevExpress.Pdf.Native.BouncyCastle.Utilities.Encoders;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -37,24 +38,22 @@ namespace ExAminoStreams.API
                 try
                 {
                     response = await client.GetAsync(endpoint);
-                    response.EnsureSuccessStatusCode();
-                    var jsonData = await response.Content.ReadAsStringAsync();
-                    return jsonData;
+                    if(response.IsSuccessStatusCode)
+                    {
+                        var jsonData = await response.Content.ReadAsStringAsync();
+                        return jsonData;
+                    }
+                    else
+                    {
+                        if (response.StatusCode == System.Net.HttpStatusCode.HttpVersionNotSupported)
+                            Manage505Response(await response.Content.ReadAsStringAsync());
+                        else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                            Manage404Response(await response.Content.ReadAsStringAsync());
+                    }
                 }
                 catch (Exception ex)
                 {
-                    if (response is null)
-                    {
-                        MessageBox.Show(ex.Message, "Unhandled Error");
-                        return string.Empty;
-                    }
-
-                    if (ex.HResult == 505)
-                        Manage505Response(await response.Content.ReadAsStringAsync());
-                    else if (ex.HResult == 404)
-                        Manage404Response(await response.Content.ReadAsStringAsync());
-                    else
-                        MessageBox.Show(ex.Message, "Unhandled Error");
+                    MessageBox.Show(ex.Message, "Unhandled Error");
                 }
 
                 return string.Empty;
@@ -78,7 +77,7 @@ namespace ExAminoStreams.API
         private string GetSignedJWT()
         {
 
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("{secret}"));
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("C2sHA3kdAsFaIzD2e7SBzMOq15g6Bvu3ZJioP5e76Swq6XzD"));
             var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
             var header = new JwtHeader(signingCredentials);

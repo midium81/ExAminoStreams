@@ -89,7 +89,7 @@ namespace SingleExePOC
                 "--directx-use-sysmem",
                 "--avcodec-hw=none",
                 "--adaptive-logic=highest",
-                "--prefetch-buffer-size=50000"/*,
+                /*"--prefetch-buffer-size=50000"/*,
                 "--prefetch-read-size=5000000",
                 "--prefetch-seek-threshold=5000000"*/
             });
