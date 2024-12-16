@@ -7,7 +7,6 @@ namespace ExAminoStreams.Controls
     [DefaultEvent("Scroll"), DefaultProperty("BarInnerColor")]
     public partial class VideoSlider : Control
     {
-
         #region Events
 
         /// <summary>
@@ -24,19 +23,22 @@ namespace ExAminoStreams.Controls
         [Category("Behavior")]
         public event ScrollEventHandler Scroll;
 
-        #endregion
+        #endregion Events
 
         #region Properties
+
         private Rectangle barRect; //bounding rectangle of bar area
         private Rectangle elapsedRect; //bounding rectangle of elapsed area
 
         // Margin left & right (bottom & Top)
         private int OffsetL = 0;
+
         private int OffsetR = 0;
 
         #region Thumb
 
         private Rectangle thumbRect; //bounding rectangle of thumb area
+
         /// <summary>
         /// Gets the thumb rect. Usefull to determine bounding rectangle when creating custom thumb shape.
         /// </summary>
@@ -65,18 +67,16 @@ namespace ExAminoStreams.Controls
                 int h = value.Height;
                 int w = value.Width;
                 if (h > 0 && w > 0)
-                {
                     _thumbSize = new Size(w, h);
-                }
                 else
-                    throw new ArgumentOutOfRangeException(
-                        "TrackSize has to be greather than zero and lower than half of Slider width");
+                    throw new ArgumentOutOfRangeException("TrackSize has to be greather than zero and lower than half of Slider width");
 
                 Invalidate();
             }
         }
 
         private Size _thumbRoundRectSize = new Size(16, 16);
+
         /// <summary>
         /// Gets or sets the size of the thumb round rectangle edges.
         /// </summary>
@@ -97,11 +97,12 @@ namespace ExAminoStreams.Controls
             }
         }
 
-        #endregion
+        #endregion Thumb
 
         #region Appearance
 
         private int _padding = 0;
+
         /// <summary>
         /// Gets or sets the padding (inside margins: left & right or bottom & top)
         /// </summary>
@@ -124,11 +125,12 @@ namespace ExAminoStreams.Controls
             }
         }
 
-        #endregion
+        #endregion Appearance
 
         #region Values
 
         private long _trackerValue = 30;
+
         /// <summary>
         /// Gets or sets the value of Slider.
         /// </summary>
@@ -145,7 +147,7 @@ namespace ExAminoStreams.Controls
                 if (value >= _minimum & value <= _maximum)
                 {
                     _trackerValue = value;
-                    if (ValueChanged != null) ValueChanged(this, new EventArgs());
+                    ValueChanged?.Invoke(this, new EventArgs());
                     Invalidate();
                 }
                 else throw new ArgumentOutOfRangeException("Value is outside appropriate range (min, max)");
@@ -153,6 +155,7 @@ namespace ExAminoStreams.Controls
         }
 
         private long _minimum = 0;
+
         /// <summary>
         /// Gets or sets the minimum value.
         /// </summary>
@@ -172,7 +175,7 @@ namespace ExAminoStreams.Controls
                     if (_trackerValue < _minimum)
                     {
                         _trackerValue = _minimum;
-                        if (ValueChanged != null) ValueChanged(this, new EventArgs());
+                        ValueChanged?.Invoke(this, new EventArgs());
                     }
                     Invalidate();
                 }
@@ -181,6 +184,7 @@ namespace ExAminoStreams.Controls
         }
 
         private long _maximum = 100;
+
         /// <summary>
         /// Gets or sets the maximum value.
         /// </summary>
@@ -200,7 +204,7 @@ namespace ExAminoStreams.Controls
                     if (_trackerValue > _maximum)
                     {
                         _trackerValue = _maximum;
-                        if (ValueChanged != null) ValueChanged(this, new EventArgs());
+                        ValueChanged?.Invoke(this, new EventArgs());
                     }
                     Invalidate();
                 }
@@ -209,6 +213,7 @@ namespace ExAminoStreams.Controls
         }
 
         private long _smallChange = 1;
+
         /// <summary>
         /// Gets or sets trackbar's small change. It affects how to behave when directional keys are pressed
         /// </summary>
@@ -223,6 +228,7 @@ namespace ExAminoStreams.Controls
         }
 
         private long _largeChange = 5;
+
         /// <summary>
         /// Gets or sets trackbar's large change. It affects how to behave when PageUp/PageDown keys are pressed
         /// </summary>
@@ -236,11 +242,12 @@ namespace ExAminoStreams.Controls
             set { _largeChange = value; }
         }
 
-        #endregion
+        #endregion Values
 
         #region Colors
 
         private Color _thumbOuterColor = Color.White;
+
         /// <summary>
         /// Gets or sets the thumb outer color.
         /// </summary>
@@ -259,6 +266,7 @@ namespace ExAminoStreams.Controls
         }
 
         private Color _thumbInnerColor = Color.FromArgb(21, 56, 152);
+
         /// <summary>
         /// Gets or sets the inner color of the thumb.
         /// </summary>
@@ -276,6 +284,7 @@ namespace ExAminoStreams.Controls
         }
 
         private Color _thumbPenColor = Color.FromArgb(21, 56, 152);
+
         /// <summary>
         /// Gets or sets the color of the thumb pen.
         /// </summary>
@@ -293,6 +302,7 @@ namespace ExAminoStreams.Controls
         }
 
         private Color _barInnerColor = Color.Black;
+
         /// <summary>
         /// Gets or sets the inner color of the bar.
         /// </summary>
@@ -311,6 +321,7 @@ namespace ExAminoStreams.Controls
         }
 
         private Color _elapsedInnerColor = Color.FromArgb(21, 56, 152);
+
         /// <summary>
         /// Gets or sets the inner color of the elapsed.
         /// </summary>
@@ -328,6 +339,7 @@ namespace ExAminoStreams.Controls
         }
 
         private Color _tickColor = Color.White;
+
         /// <summary>
         /// Gets or sets the color of the graduations
         /// </summary>
@@ -346,14 +358,14 @@ namespace ExAminoStreams.Controls
             }
         }
 
-        #endregion
+        #endregion Colors
 
         #region Divisions
 
-        // For ex: if values are multiples of 50, 
+        // For ex: if values are multiples of 50,
         // values = 0, 50, 100, 150 etc...
         //set TickDivide to 50
-        // And ticks will be displayed as 
+        // And ticks will be displayed as
         // values = 0, 1, 2, 3 etc...
         private float _tickDivide = 0;
 
@@ -370,6 +382,7 @@ namespace ExAminoStreams.Controls
         }
 
         private float _tickAdd = 0;
+
         [Description("Gets or sets a value added to the graduation")]
         [Category(nameof(VideoSlider))]
         public float TickAdd
@@ -383,6 +396,7 @@ namespace ExAminoStreams.Controls
         }
 
         private TickStyle _tickStyle = TickStyle.TopLeft;
+
         /// <summary>
         /// Gets or sets where to display the ticks (None, both top-left, bottom-right)
         /// </summary>
@@ -400,6 +414,7 @@ namespace ExAminoStreams.Controls
         }
 
         private decimal _scaleDivisions = 10;
+
         /// <summary>
         /// How many divisions of maximum?
         /// </summary>
@@ -411,15 +426,14 @@ namespace ExAminoStreams.Controls
             set
             {
                 if (value > 0)
-                {
                     _scaleDivisions = value;
-                }
 
                 Invalidate();
             }
         }
 
         private decimal _scaleSubDivisions = 5;
+
         /// <summary>
         /// How many subdivisions for each division
         /// </summary>
@@ -431,16 +445,14 @@ namespace ExAminoStreams.Controls
             set
             {
                 if (value > 0 && _scaleDivisions > 0 && (_maximum - _minimum) / ((value + 1) * _scaleDivisions) > 0)
-                {
                     _scaleSubDivisions = value;
-
-                }
 
                 Invalidate();
             }
         }
 
         private bool _showSmallScale = false;
+
         /// <summary>
         /// Shows Small Scale marking.
         /// </summary>
@@ -451,7 +463,6 @@ namespace ExAminoStreams.Controls
             get { return _showSmallScale; }
             set
             {
-
                 if (value == true)
                 {
                     if (_scaleDivisions > 0 && _scaleSubDivisions > 0 && (_maximum - _minimum) / ((_scaleSubDivisions + 1) * _scaleDivisions) > 0)
@@ -460,20 +471,19 @@ namespace ExAminoStreams.Controls
                         Invalidate();
                     }
                     else
-                    {
                         _showSmallScale = false;
-                    }
                 }
                 else
                 {
                     _showSmallScale = value;
-                    // need to redraw 
+                    // need to redraw
                     Invalidate();
                 }
             }
         }
 
         private bool _showBigScale = false;
+
         /// <summary>
         /// Shows Small Scale marking.
         /// </summary>
@@ -484,7 +494,6 @@ namespace ExAminoStreams.Controls
             get { return _showBigScale; }
             set
             {
-
                 if (value == true)
                 {
                     if (_scaleDivisions > 0 && _scaleSubDivisions > 0 && (_maximum - _minimum) / ((_scaleSubDivisions + 1) * _scaleDivisions) > 0)
@@ -493,20 +502,19 @@ namespace ExAminoStreams.Controls
                         Invalidate();
                     }
                     else
-                    {
                         _showBigScale = false;
-                    }
                 }
                 else
                 {
                     _showBigScale = value;
-                    // need to redraw 
+                    // need to redraw
                     Invalidate();
                 }
             }
         }
 
         private bool _showDivisionsText = true;
+
         /// <summary>
         /// Shows Small Scale marking.
         /// </summary>
@@ -522,7 +530,7 @@ namespace ExAminoStreams.Controls
             }
         }
 
-        #endregion
+        #endregion Divisions
 
         #region Font
 
@@ -572,13 +580,15 @@ namespace ExAminoStreams.Controls
             }
         }
 
-        #endregion
+        #endregion Font
 
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
-        public VideoSlider() : this(0, 100, 30) { }
+        public VideoSlider() : this(0, 100, 30)
+        {
+        }
 
         // <summary>
         /// Initializes a new instance of the <see cref="ColorSlider"/> class.
@@ -599,14 +609,14 @@ namespace ExAminoStreams.Controls
             ForeColor = Color.White;
 
             // Font
-            //this.Font = new Font("Tahoma", 6.75f);
             this.Font = new Font("Microsoft Sans Serif", 6f);
 
             Minimum = min;
             Maximum = max;
             Value = value;
         }
-        #endregion
+
+        #endregion Constructors
 
         #region Paint
 
@@ -618,34 +628,40 @@ namespace ExAminoStreams.Controls
         {
             if (!Enabled)
             {
-                Color[] desaturatedColors = DesaturateColors(_thumbOuterColor, _thumbInnerColor, _thumbPenColor,
+                Color[] desaturatedColors = DesaturateColors(_thumbOuterColor,
+                                                             _thumbInnerColor,
+                                                             _thumbPenColor,
                                                              _barInnerColor,
                                                              _elapsedInnerColor);
-                DrawColorSlider(e,
-                                    desaturatedColors[0], desaturatedColors[1], desaturatedColors[2],
-                                    desaturatedColors[3],
-                                    desaturatedColors[4]);
+                DrawColorSlider(paintArgs: e,
+                                thumbOuterColorPaint: desaturatedColors[0],
+                                thumbInnerColorPaint: desaturatedColors[1],
+                                thumbPenColorPaint: desaturatedColors[2],
+                                barInnerColorPaint: desaturatedColors[3],
+                                elapsedInnerColorPaint: desaturatedColors[4]);
             }
             else
             {
-                DrawColorSlider(e,
-                                _thumbOuterColor, _thumbInnerColor, _thumbPenColor,
-                                _barInnerColor,
-                                _elapsedInnerColor);
+                DrawColorSlider(paintArgs: e,
+                                thumbOuterColorPaint: _thumbOuterColor,
+                                thumbInnerColorPaint: _thumbInnerColor,
+                                thumbPenColorPaint: _thumbPenColor,
+                                barInnerColorPaint: _barInnerColor,
+                                elapsedInnerColorPaint: _elapsedInnerColor);
             }
         }
 
         /// <summary>
         /// Draws the colorslider control using passed colors.
         /// </summary>
-        /// <param name="e">The <see cref="T:System.Windows.Forms.PaintEventArgs"/> instance containing the event data.</param>
+        /// <param name="paintArgs">The <see cref="T:System.Windows.Forms.PaintEventArgs"/> instance containing the event data.</param>
         /// <param name="thumbOuterColorPaint">The thumb outer color paint.</param>
         /// <param name="thumbInnerColorPaint">The thumb inner color paint.</param>
         /// <param name="thumbPenColorPaint">The thumb pen color paint.</param>
         /// <param name="barInnerColorPaint">The bar inner color paint.</param>
         /// <param name="barPenColorPaint">The bar pen color paint.</param>
         /// <param name="elapsedInnerColorPaint">The elapsed inner color paint.</param>
-        private void DrawColorSlider(PaintEventArgs e,
+        private void DrawColorSlider(PaintEventArgs paintArgs,
                                      Color thumbOuterColorPaint,
                                      Color thumbInnerColorPaint,
                                      Color thumbPenColorPaint,
@@ -657,7 +673,7 @@ namespace ExAminoStreams.Controls
                 //adjust drawing rects
                 barRect = ClientRectangle;
 
-                //set up thumbRect 
+                //set up thumbRect
                 decimal TrackX = OffsetL + ((_trackerValue - _minimum) * (ClientRectangle.Width - OffsetL - OffsetR - _thumbSize.Width)) / (_maximum - _minimum);
                 thumbRect = new Rectangle((int)TrackX, barRect.Y + ClientRectangle.Height / 2 - _thumbSize.Height / 2, _thumbSize.Width, _thumbSize.Height);
 
@@ -671,24 +687,23 @@ namespace ExAminoStreams.Controls
                 elapsedRect = barRect;
                 elapsedRect.Width = (thumbRect.Left + _thumbSize.Width / 2) - OffsetL;
 
-
-                //get thumb shape path 
+                //get thumb shape path
                 GraphicsPath thumbPath = CreateRoundRectPath(thumbRect, _thumbRoundRectSize);
 
                 //draw bar
 
                 #region draw inner bar
 
-                // inner bar is a single line 
+                // inner bar is a single line
                 // draw the line on the whole length of the control
-                e.Graphics.DrawLine(new Pen(barInnerColorPaint, 3f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + barRect.Width, barRect.Y + barRect.Height / 2);
-                #endregion
+                paintArgs.Graphics.DrawLine(new Pen(barInnerColorPaint, 3f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + barRect.Width, barRect.Y + barRect.Height / 2);
 
+                #endregion draw inner bar
 
                 #region draw elapsed bar
 
-                //draw elapsed inner bar (single line too)                               
-                e.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 3f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + barRect.Height / 2);
+                //draw elapsed inner bar (single line too)
+                paintArgs.Graphics.DrawLine(new Pen(elapsedInnerColorPaint, 3f), barRect.X, barRect.Y + barRect.Height / 2, barRect.X + elapsedRect.Width, barRect.Y + barRect.Height / 2);
 
                 #endregion draw elapsed bar
 
@@ -703,18 +718,18 @@ namespace ExAminoStreams.Controls
                 {
                     lgbThumb.WrapMode = WrapMode.TileFlipXY;
 
-                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                    e.Graphics.FillPath(lgbThumb, thumbPath);
+                    paintArgs.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    paintArgs.Graphics.FillPath(lgbThumb, thumbPath);
 
                     //draw thumb band
                     Color newThumbPenColor = thumbPenColorPaint;
 
                     using (Pen thumbPen = new Pen(newThumbPenColor))
                     {
-                        e.Graphics.DrawPath(thumbPen, thumbPath);
+                        paintArgs.Graphics.DrawPath(thumbPen, thumbPath);
                     }
-
                 }
+
                 #endregion draw thumb
 
                 #region draw ticks
@@ -730,22 +745,21 @@ namespace ExAminoStreams.Controls
                     float rulerValue = 0;
                     int offset = 0;
 
-                    // Calculate width W to draw graduations 
+                    // Calculate width W to draw graduations
                     // Remove the width of the thumb (half thumb at each end)
-                    // in order that when the thumb is at minimum position or maximum position, 
-                    // the graduation coincide with the middle of the thumb  
+                    // in order that when the thumb is at minimum position or maximum position,
+                    // the graduation coincide with the middle of the thumb
                     start = thumbRect.Width / 2;
                     W = barRect.Width - thumbRect.Width;
                     rulerValue = (float)_minimum;
                     offset = 2 + thumbRect.Height / 2;
 
                     // pen for ticks
-                    Pen penTickL = new Pen(_tickColor, 1f);
-                    Pen penTickS = new Pen(_tickColor, 1f);
+                    Pen penTickL = new(_tickColor, 1f);
+                    Pen penTickS = new(_tickColor, 1f);
                     int idx = 0;
                     int scaleL = 5;     // division length
-                    int scaleS = 3;     // subdivision length    
-
+                    int scaleS = 3;     // subdivision length
 
                     // strings graduations
                     float tx = 0;
@@ -753,13 +767,12 @@ namespace ExAminoStreams.Controls
                     int startDiv = 0;
 
                     Color _scaleColor = ForeColor;
-                    SolidBrush br = new SolidBrush(_scaleColor);
+                    SolidBrush br = new(_scaleColor);
 
-                    // Calculate max size of text 
-                    //string str = String.Format("{0,0:D}", (int)_maximum);
+                    // Calculate max size of text
                     string str = String.Format("{0,0:##}", _maximum);
                     Font font = this.Font;
-                    SizeF maxsize = e.Graphics.MeasureString(str, font);
+                    SizeF maxsize = paintArgs.Graphics.MeasureString(str, font);
 
                     for (int i = 0; i <= _scaleDivisions; i++)
                     {
@@ -768,52 +781,47 @@ namespace ExAminoStreams.Controls
 
                         // apply a transformation to the ticks displayed
                         if (_tickDivide != 0)
-                            val = val / _tickDivide;
+                            val /= _tickDivide;
 
                         if (_tickAdd != 0)
-                            val = val + _tickAdd;
+                            val += _tickAdd;
 
                         str = String.Format("{0:0.##}", val);
-                        SizeF size = e.Graphics.MeasureString(str, font);
+                        SizeF size = paintArgs.Graphics.MeasureString(str, font);
 
-
-                        // HORIZONTAL
                         // Draw string graduations
                         if (_showDivisionsText)
                         {
                             if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                             {
                                 tx = (start + barRect.X + interval) - (float)(size.Width * 0.5);
-                                //ty = barRect.Y + barRect.Height / 2 - (1.5F)*(size.Height) - scaleL - offset;
                                 ty = barRect.Y + barRect.Height / 2 - size.Height - scaleL - offset;
-                                e.Graphics.DrawString(str, font, br, tx, ty);
+                                paintArgs.Graphics.DrawString(str, font, br, tx, ty);
                             }
                             if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                             {
                                 tx = (start + barRect.X + interval) - (float)(size.Width * 0.5);
-                                //ty = barRect.Y + barRect.Height/2 + (size.Height/2) + scaleL + offset;
                                 ty = barRect.Y + barRect.Height / 2 + scaleL + offset;
-                                e.Graphics.DrawString(str, font, br, tx, ty);
+                                paintArgs.Graphics.DrawString(str, font, br, tx, ty);
                             }
                         }
 
-                        // draw main ticks                           
+                        // draw main ticks
                         if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                         {
                             x1 = start + barRect.X + interval;
                             y1 = barRect.Y + barRect.Height / 2 - scaleL - offset;
                             x2 = start + barRect.X + interval;
                             y2 = barRect.Y + barRect.Height / 2 - offset;
-                            e.Graphics.DrawLine(penTickL, x1, y1, x2, y2);
+                            paintArgs.Graphics.DrawLine(penTickL, x1, y1, x2, y2);
                         }
                         if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                         {
-
                             x1 = start + barRect.X + interval;
                             y1 = barRect.Y + barRect.Height / 2 + offset;
                             x2 = start + barRect.X + interval;
                             y2 = barRect.Y + barRect.Height / 2 + scaleL + offset;
-                            e.Graphics.DrawLine(penTickL, x1, y1, x2, y2);
+                            paintArgs.Graphics.DrawLine(penTickL, x1, y1, x2, y2);
                         }
 
                         rulerValue += (float)((_maximum - _minimum) / (_scaleDivisions));
@@ -828,14 +836,14 @@ namespace ExAminoStreams.Controls
 
                                 if (_showSmallScale)
                                 {
-                                    // Horizontal                            
+                                    // Horizontal
                                     if (_tickStyle == TickStyle.TopLeft || _tickStyle == TickStyle.Both)
                                     {
                                         x1 = start + barRect.X + interval;
                                         y1 = barRect.Y + barRect.Height / 2 - scaleS - offset;
                                         x2 = start + barRect.X + interval;
                                         y2 = barRect.Y + barRect.Height / 2 - offset;
-                                        e.Graphics.DrawLine(penTickS, x1, y1, x2, y2);
+                                        paintArgs.Graphics.DrawLine(penTickS, x1, y1, x2, y2);
                                     }
                                     if (_tickStyle == TickStyle.BottomRight || _tickStyle == TickStyle.Both)
                                     {
@@ -843,14 +851,15 @@ namespace ExAminoStreams.Controls
                                         y1 = barRect.Y + barRect.Height / 2 + offset;
                                         x2 = start + barRect.X + interval;
                                         y2 = barRect.Y + barRect.Height / 2 + scaleS + offset;
-                                        e.Graphics.DrawLine(penTickS, x1, y1, x2, y2);
+                                        paintArgs.Graphics.DrawLine(penTickS, x1, y1, x2, y2);
                                     }
                                 }
                             }
                         }
                     }
                 }
-                #endregion
+
+                #endregion draw ticks
             }
             catch (Exception Err)
             {
@@ -861,11 +870,14 @@ namespace ExAminoStreams.Controls
             }
         }
 
-        #endregion    
+        #endregion Paint
+
+
 
         #region Overrided events
 
         private bool mouseInRegion = false;
+
         /// <summary>
         /// Raises the <see cref="E:System.Windows.Forms.Control.EnabledChanged"></see> event.
         /// </summary>
@@ -909,8 +921,8 @@ namespace ExAminoStreams.Controls
             if (e.Button == MouseButtons.Left)
             {
                 Capture = true;
-                if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.ThumbTrack, (int)_trackerValue));
-                if (ValueChanged != null) ValueChanged(this, new EventArgs());
+                Scroll?.Invoke(this, new ScrollEventArgs(ScrollEventType.ThumbTrack, (int)_trackerValue));
+                ValueChanged?.Invoke(this, new EventArgs());
                 OnMouseMove(e);
             }
         }
@@ -952,8 +964,8 @@ namespace ExAminoStreams.Controls
                     set = ScrollEventType.Last;
                 }
 
-                if (Scroll != null) Scroll(this, new ScrollEventArgs(set, (int)_trackerValue));
-                if (ValueChanged != null) ValueChanged(this, new EventArgs());
+                Scroll?.Invoke(this, new ScrollEventArgs(set, (int)_trackerValue));
+                ValueChanged?.Invoke(this, new EventArgs());
             }
             Invalidate();
         }
@@ -967,8 +979,8 @@ namespace ExAminoStreams.Controls
             base.OnMouseUp(e);
             Capture = false;
             mouseInThumbRegion = IsPointInRect(e.Location, thumbRect);
-            if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.EndScroll, (int)_trackerValue));
-            if (ValueChanged != null) ValueChanged(this, new EventArgs());
+            Scroll?.Invoke(this, new ScrollEventArgs(ScrollEventType.EndScroll, (int)_trackerValue));
+            ValueChanged?.Invoke(this, new EventArgs());
             Invalidate();
         }
 
@@ -1004,26 +1016,31 @@ namespace ExAminoStreams.Controls
                 case Keys.Down:
                 case Keys.Left:
                     SetProperValue(Value - (int)_smallChange);
-                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.SmallDecrement, (int)Value));
+                    Scroll?.Invoke(this, new ScrollEventArgs(ScrollEventType.SmallDecrement, (int)Value));
                     break;
+
                 case Keys.Up:
                 case Keys.Right:
                     SetProperValue(Value + (int)_smallChange);
-                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.SmallIncrement, (int)Value));
+                    Scroll?.Invoke(this, new ScrollEventArgs(ScrollEventType.SmallIncrement, (int)Value));
                     break;
+
                 case Keys.Home:
                     Value = _minimum;
                     break;
+
                 case Keys.End:
                     Value = _maximum;
                     break;
+
                 case Keys.PageDown:
                     SetProperValue(Value - (int)_largeChange);
-                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.LargeDecrement, (int)Value));
+                    Scroll?.Invoke(this, new ScrollEventArgs(ScrollEventType.LargeDecrement, (int)Value));
                     break;
+
                 case Keys.PageUp:
                     SetProperValue(Value + (int)_largeChange);
-                    if (Scroll != null) Scroll(this, new ScrollEventArgs(ScrollEventType.LargeIncrement, (int)Value));
+                    Scroll?.Invoke(this, new ScrollEventArgs(ScrollEventType.LargeIncrement, (int)Value));
                     break;
             }
             if (Scroll != null && Value == _minimum) Scroll(this, new ScrollEventArgs(ScrollEventType.First, (int)Value));
@@ -1050,7 +1067,7 @@ namespace ExAminoStreams.Controls
             }
         }
 
-        #endregion
+        #endregion Overrided events
 
         #region Help routines
 
@@ -1062,7 +1079,7 @@ namespace ExAminoStreams.Controls
         /// <returns></returns>
         public static GraphicsPath CreateRoundRectPath(Rectangle rect, Size size)
         {
-            GraphicsPath gp = new GraphicsPath();
+            GraphicsPath gp = new();
             gp.AddLine(rect.Left + size.Width / 2, rect.Top, rect.Right - size.Width / 2, rect.Top);
             gp.AddArc(rect.Right - size.Width, rect.Top, size.Width, size.Height, 270, 90);
 
@@ -1104,9 +1121,8 @@ namespace ExAminoStreams.Controls
         {
             Color[] colorsToReturn = new Color[colorsToLighten.Length];
             for (int i = 0; i < colorsToLighten.Length; i++)
-            {
                 colorsToReturn[i] = ControlPaint.Light(colorsToLighten[i]);
-            }
+
             return colorsToReturn;
         }
 
@@ -1116,9 +1132,12 @@ namespace ExAminoStreams.Controls
         /// <param name="val">The value.</param>
         private void SetProperValue(long val)
         {
-            if (val < _minimum) Value = _minimum;
-            else if (val > _maximum) Value = _maximum;
-            else Value = val;
+            if (val < _minimum) 
+                Value = _minimum;
+            else if (val > _maximum) 
+                Value = _maximum;
+            else 
+                Value = val;
         }
 
         /// <summary>
@@ -1131,12 +1150,8 @@ namespace ExAminoStreams.Controls
         /// </returns>
         private static bool IsPointInRect(Point pt, Rectangle rect)
         {
-            if (pt.X > rect.Left & pt.X < rect.Right & pt.Y > rect.Top & pt.Y < rect.Bottom)
-                return true;
-            else return false;
+            return pt.X > rect.Left & pt.X < rect.Right & pt.Y > rect.Top & pt.Y < rect.Bottom;
         }
-
-        #endregion
+        #endregion Help routines
     }
-
 }
