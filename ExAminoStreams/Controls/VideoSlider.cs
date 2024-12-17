@@ -674,7 +674,7 @@ namespace ExAminoStreams.Controls
                 barRect = ClientRectangle;
 
                 //set up thumbRect
-                decimal TrackX = OffsetL + ((_trackerValue - _minimum) * (ClientRectangle.Width - OffsetL - OffsetR - _thumbSize.Width)) / (_maximum - _minimum);
+                decimal TrackX = OffsetL + ((_trackerValue - _minimum) * (ClientRectangle.Width - OffsetL - OffsetR + (_thumbSize.Width/2))) / (_maximum - _minimum);
                 thumbRect = new Rectangle((int)TrackX, barRect.Y + ClientRectangle.Height / 2 - _thumbSize.Height / 2, _thumbSize.Width, _thumbSize.Height);
 
                 LinearGradientMode gradientOrientation;
