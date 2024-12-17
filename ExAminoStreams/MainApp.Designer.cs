@@ -193,9 +193,9 @@
             trkVideoTime.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             trkVideoTime.AutoSize = false;
             trkVideoTime.Enabled = false;
-            trkVideoTime.LargeChange = 0.5F;
+            trkVideoTime.LargeChange = 5F;
             trkVideoTime.Location = new Point(396, 417);
-            trkVideoTime.Maximum = 1E+08F;
+            trkVideoTime.Maximum = 0F;
             trkVideoTime.Minimum = 0F;
             trkVideoTime.Name = "trkVideoTime";
             trkVideoTime.Precision = 0.1F;
@@ -272,8 +272,8 @@
             videoSlider.SmallChange = 1L;
             videoSlider.TabIndex = 18;
             videoSlider.Text = "videoSlider1";
-            videoSlider.ThumbInnerColor = Color.FromArgb(95, 140, 180);
-            videoSlider.ThumbOuterColor = Color.FromArgb(95, 140, 180);
+            videoSlider.ThumbInnerColor = SystemColors.Highlight;
+            videoSlider.ThumbOuterColor = SystemColors.Highlight;
             videoSlider.ThumbPenColor = Color.FromArgb(21, 56, 152);
             videoSlider.ThumbRoundRectSize = new Size(1, 1);
             videoSlider.ThumbSize = new Size(8, 16);
