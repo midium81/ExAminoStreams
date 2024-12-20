@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 namespace ExAminoStreams.Controls
 {
     [ToolboxBitmap(typeof(TrackBar))]
-    [DefaultEvent("Scroll"), DefaultProperty("BarInnerColor")]
+    [DefaultEvent("Scroll"), DefaultProperty("Value")]
     public partial class VideoSlider : Control
     {
         #region Events
@@ -674,7 +674,7 @@ namespace ExAminoStreams.Controls
                 barRect = ClientRectangle;
 
                 //set up thumbRect
-                decimal TrackX = OffsetL + ((_trackerValue - _minimum) * (ClientRectangle.Width - OffsetL - OffsetR - _thumbSize.Width)) / (_maximum - _minimum);
+                decimal TrackX = OffsetL + (_trackerValue - _minimum) * (ClientRectangle.Width - OffsetL - OffsetR) / (_maximum - _minimum) - (_thumbSize.Width / 2);
                 thumbRect = new Rectangle((int)TrackX, barRect.Y + ClientRectangle.Height / 2 - _thumbSize.Height / 2, _thumbSize.Width, _thumbSize.Height);
 
                 LinearGradientMode gradientOrientation;
@@ -942,16 +942,13 @@ namespace ExAminoStreams.Controls
             {
                 ScrollEventType set = ScrollEventType.ThumbPosition;
                 Point pt = e.Location;
-                int p = pt.X;
+                int p = pt.X - OffsetL;
 
-                int margin = _thumbSize.Height >> 1;
-                p -= margin;
+                _trackerValue = _minimum + (p * (_maximum - _minimum)) / (ClientRectangle.Width - OffsetL - OffsetR);
 
-                _trackerValue = _minimum + (p - OffsetL) * (_maximum - _minimum) / (ClientRectangle.Width - OffsetL - OffsetR - _thumbSize.Width);
-
-                // Number of divisions
-                int nbdiv = (int)(_trackerValue / _smallChange);
-                _trackerValue = nbdiv * _smallChange;
+                //// Number of divisions
+                //int nbdiv = (int)(_trackerValue / _smallChange);
+                //_trackerValue = nbdiv * _smallChange;
 
                 if (_trackerValue <= _minimum)
                 {
